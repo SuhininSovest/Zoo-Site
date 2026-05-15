@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  # Наш подопытный сервис
+  nginx:
+    image: nginx:latest
+    container_name: target_nginx
+    volumes:
+      - ./metrics.txt:/usr/share/nginx/html/metrics.txt
+    ports:
+      - "8080:80"
+
+  # Датчик (собирает метрики)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./alert.rules:/etc/prometheus/alert.rules
+    ports:
+      - "9090:9090"
+
+  # Контроллер (принимает решения об аварии)
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: alertmanager
+    volumes:
+      - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    ports:
+      - "9093:9093"
+
+  # Исполнительный механизм (наш скрипт восстановления)
+  healer:
+    build: ./healer
+    container_name: auto_healer
+    volumes:
+      # Прокидываем сокет Docker, чтобы контейнер мог управлять другими контейнерами
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "5000:5000"
+
+  # HMI (Интерфейс оператора)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"

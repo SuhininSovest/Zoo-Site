@@ -1,0 +1,8 @@
+{
+  "/page": "app/page.js",
+  "/veterinary/page": "app/veterinary/page.js",
+  "/animals/page": "app/animals/page.js",
+  "/enclosures/page": "app/enclosures/page.js",
+  "/feeding/page": "app/feeding/page.js",
+  "/maintenance/page": "app/maintenance/page.js"
+}

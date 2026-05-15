@@ -1,0 +1,10 @@
+groups:
+- name: auto_healing
+  rules:
+  - alert: NginxIsDown
+    expr: up{job="nginx_target"} == 0
+    for: 15s
+    labels:
+      severity: critical
+    annotations:
+      summary: "Критическая ошибка: Nginx недоступен более 15 секунд!"
