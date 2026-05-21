@@ -398,6 +398,7 @@ erDiagram
   }
   FEEDING_MENU {
     int id PK
+    int feed_id FK
     date feed_date
     string feed_time
     float quantity
@@ -443,12 +444,15 @@ erDiagram
   SUPPLIER ||--o{ FEED : "поставляет"
   ANIMAL ||--o{ FEEDING_MENU : "кормление"
   RATION_RULE ||--o{ FEEDING_MENU : "определяет"
+  FEED ||--o{ FEEDING_MENU : "используется"
+  STAFF }o--o{ CELL : "доступ/обслуживание"
   ANIMAL ||--o{ VET_CHECKUP : "осмотры"
   ANIMAL ||--o{ VACCINATION : "прививки"
   ANIMAL ||--o{ TREATMENT : "лечение"
   ANIMAL ||--o{ ISOLATION : "изолируется"
   ANIMAL ||--o{ BREEDING_PAIR : "участвует"
   STAFF ||--o{ OFFSPRING_DECISION : "принимает"
+
 ```
 
 ## 5. Внешние интерфейсы
