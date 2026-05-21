@@ -1,0 +1,136 @@
+@startuml usecase
+title Диаграмма вариантов использования (Use Case Diagram) — ИС зоопарка (вариант 20)
+
+left to right direction
+
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+
+' Цвета и стили
+skinparam BaseFontName "sans-serif"
+skinparam TitleFontSize 18
+skinparam TitleFontColor #2E5A44
+skinparam ActorBorderColor #2E5A44
+skinparam ActorBackgroundColor #EBF7EE
+skinparam UseCaseBorderColor #2E5A44
+skinparam UseCaseBackgroundColor #FCFDFB
+skinparam ArrowColor #2E5A44
+
+actor "Ветеринар" as Vet
+actor "Сотрудник стационара" as Hosp
+actor "Уборщик" as Cleaner
+actor "Дрессировщик" as Trainer
+actor "Строитель-ремонтник" as Builder
+actor "Администрация" as Admin
+
+actor "ИС учета персонала" as HR << Application >>
+actor "ИС складского учета" as Acc << Application >>
+actor "ИС поставщика кормов" as Sup << Application >>
+actor "Другой зоопарк" as OZ << Application >>
+
+rectangle "Информационная система зоопарка" {
+  
+  package "Управление персоналом и доступом" {
+    usecase "UC_1.1: Обмен данными о сотрудниках и ролях" as UC_1_1
+  }
+
+  package "Учёт особей" {
+    usecase "UC_2.1: Регистрация особи и создание карточки" as UC_2_1
+    usecase "UC_2.2: Ведение карточки особи" as UC_2_2
+  }
+
+  package "Ветеринарное сопровождение и стационар" {
+    usecase "UC_3.1: Проведение медосмотра" as UC_3_1
+    usecase "UC_3.2: Планирование прививок" as UC_3_2
+    usecase "UC_3.3: Фиксация выполнения прививок" as UC_3_3
+    usecase "UC_3.4: Назначение лечения" as UC_3_4
+    usecase "UC_3.5: Ведение результата лечения" as UC_3_5
+    usecase "UC_3.6: Оформление изоляции" as UC_3_6
+    usecase "UC_3.7: Управление статусом лечения в стационаре" as UC_3_7
+    usecase "UC_3.8: Снятие изоляции / выписка" as UC_3_8
+  }
+
+  package "Расселение и сезонные переводы" {
+    usecase "UC_4.1: Планирование расселения" as UC_4_1
+    usecase "UC_4.2: Проверка совместимости соседних клеток" as UC_4_2
+    usecase "UC_4.3: Сезонный перевод животных" as UC_4_3
+  }
+
+  package "Обслуживание и ремонт" {
+    usecase "UC_5.1: Обслуживание клеток" as UC_5_1
+    usecase "UC_5.2: Доступ к плану работ по уходу" as UC_5_2
+    usecase "UC_5.3: Заявка на ремонт/обслуживание" as UC_5_3
+    usecase "UC_5.4: Уведомление о готовности работ" as UC_5_4
+  }
+
+  package "Кормление и снабжение" {
+    usecase "UC_6.1: Формирование рациона и правил" as UC_6_1
+    usecase "UC_6.2: Формирование меню кормления на день" as UC_6_2
+    usecase "UC_6.3: Получение меню кормления на день" as UC_6_3
+    usecase "UC_6.4: Поддержка режима ухода для тренировок" as UC_6_4
+    usecase "UC_6.5: Учет кормов и поставщиков" as UC_6_5
+    usecase "UC_6.6: Формирование заказов на корма" as UC_6_6
+    usecase "UC_6.7: Обмен данными с ИС склада/бухгалтерии" as UC_6_7
+    usecase "UC_6.8: Передача заказов поставщику" as UC_6_8
+  }
+
+  package "Разведение и потомство" {
+    usecase "UC_7.1: Фиксация подходящих пар" as UC_7_1
+    usecase "UC_7.2: Оформление решения о потомстве" as UC_7_2
+    usecase "UC_7.3: Обмен данными с другим зоопарком" as UC_7_3
+  }
+}
+
+' Связи акторов с прецедентами
+
+' ИС персонала
+HR --> UC_1_1
+
+' Ветеринар
+Vet --> UC_2_1
+Vet --> UC_2_2
+Vet --> UC_3_1
+Vet --> UC_3_2
+Vet --> UC_3_3
+Vet --> UC_3_4
+Vet --> UC_3_5
+Vet --> UC_3_6
+Vet --> UC_3_8
+
+' Сотрудник стационара
+Hosp --> UC_3_7
+
+' Уборщик
+Cleaner --> UC_5_1
+Cleaner --> UC_5_2
+
+' Дрессировщик
+Trainer --> UC_6_3
+Trainer --> UC_6_4
+
+' Строитель-ремонтник
+Builder --> UC_5_3
+
+' Администрация
+Admin --> UC_4_1
+Admin --> UC_4_3
+Admin --> UC_5_4
+Admin --> UC_6_1
+Admin --> UC_6_2
+Admin --> UC_6_5
+Admin --> UC_6_6
+Admin --> UC_7_1
+Admin --> UC_7_2
+
+' Внутренние связи (includes/extends)
+UC_4_1 ..> UC_4_2 : <<include>>
+UC_6_6 ..> UC_6_7 : <<include>>
+UC_6_6 ..> UC_6_8 : <<include>>
+UC_7_2 ..> UC_7_3 : <<include>>
+
+' Внешние системы
+Acc --> UC_6_7
+Sup --> UC_6_8
+OZ --> UC_7_3
+
+@enduml
